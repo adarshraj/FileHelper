@@ -5,24 +5,26 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileHelp {
-    Logger logger = LoggerFactory.getLogger(FileHelp.class);
+    static Logger logger = LoggerFactory.getLogger(FileHelp.class);
 
     public static void main(String... arguments) {
         ArgumentParser argumentParser = new ArgumentParser(arguments);
         Path directory;
         List<Path> fileList = new ArrayList<>();
+        logger.info("------------- " + LocalDateTime.now() + " Start "+ " -------------");
         if(argumentParser.getFolder() == null) {
             String currentDirectory = System.getProperty("user.dir");
             directory = Paths.get(currentDirectory);
         }else {
-            directory = Paths.get("C:\\fffd");
+            directory = Path.of(argumentParser.getFolder());
         }
-
         new FileHelp().begin(directory, fileList, argumentParser);
+        logger.info("------------- " + LocalDateTime.now() + " End "+ " -------------");
     }
 
     private void begin(Path directory, List<Path> fileList, ArgumentParser arguments) {

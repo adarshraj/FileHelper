@@ -47,6 +47,7 @@ public class ArgumentParser {
             }
             if (cmd.hasOption("h")) {
                 createHelp(options);
+                System.exit(0);
             }
         } catch (ParseException e) {
             logger.error("Invalid option");

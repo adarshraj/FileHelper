@@ -36,8 +36,13 @@ public class FileHelp {
                     || checkForThisFile(path)) {
                         logger.info(path + " has ignored extension, skipping");
                     } else {
-                        logger.info(path + " is a file, adding to the list");
-                        fileList.add(path);
+                        if (arguments.getExtToInclude() != null && arguments.getExtToInclude().contains(fileExtension)){
+                            logger.info(path + " file adding to the list");
+                            fileList.add(path);
+                        }else {
+                            logger.info(path + " is a file, adding to the list");
+                            fileList.add(path);
+                        }
                     }
                 }
             }
@@ -77,11 +82,12 @@ public class FileHelp {
                 // Combine parent path with fileNameWithoutExtension. This is required to create folder.
                 Path newPathWithoutExtension = fileWithNoFolder.getParent().resolve(fileNameWithoutExtension);
 
-                logger.info("File name without extension is " + newPathWithoutExtension);
+                logger.info("File name without extension is: " + newPathWithoutExtension);
 
                 if (!Files.exists(newPathWithoutExtension)) {
                     // Use the newPath to create directories
                     Files.createDirectories(newPathWithoutExtension);
+                    logger.info("New folder created: " + newPathWithoutExtension);
                 }else{
                     if(arguments.isForce()){
                         Files.createDirectories(newPathWithoutExtension);

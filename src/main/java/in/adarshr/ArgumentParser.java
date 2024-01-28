@@ -15,6 +15,7 @@ public class ArgumentParser {
     private String folder;
     private String file;
     private String extToIgnore;
+    private String extToInclude;
 
     public void parseArguments(String[] args) {
         Options options = new Options();
@@ -40,6 +41,9 @@ public class ArgumentParser {
             }
             if (cmd.hasOption("ex")) {
                 setExtToIgnore(cmd.getOptionValue("ex"));
+            }
+            if (cmd.hasOption("ei")) {
+                setExtToInclude(cmd.getOptionValue("ei"));
             }
             if (cmd.hasOption("h")) {
                 createHelp(options);
@@ -95,4 +99,13 @@ public class ArgumentParser {
     public void setExtToIgnore(String extToIgnore) {
         this.extToIgnore = extToIgnore;
     }
+
+    public String getExtToInclude() {
+        return extToInclude;
+    }
+
+    public void setExtToInclude(String extToInclude) {
+        this.extToInclude = extToInclude;
+    }
+
 }

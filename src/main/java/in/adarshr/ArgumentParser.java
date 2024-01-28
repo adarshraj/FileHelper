@@ -22,7 +22,7 @@ public class ArgumentParser {
     private String extToIgnore;
 
     public void parseArguments(String[] args) {
-        setExtToIgnore(".jar");
+       // setExtToIgnore(".jar");
         if (args.length > 0) {
             String[] arguments = trimArguments(args);
             logger.info("Arguments are : " + Arrays.toString(arguments));

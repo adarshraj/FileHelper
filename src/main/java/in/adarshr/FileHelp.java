@@ -2,8 +2,13 @@ package in.adarshr;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +24,7 @@ public class FileHelp {
             String currentDirectory = System.getProperty("user.dir");
             directory = Paths.get(currentDirectory);
         }else {
-            directory = Paths.get("C:\\temp");
+            directory = Paths.get("C:\\fffd");
         }
 
         new FileHelp().begin(directory, fileList, argumentParser);
@@ -31,19 +36,38 @@ public class FileHelp {
                 if (Files.isDirectory(path)) {
                     logger.info(path + " is a directory, ignoring");
                 } else {
-                    logger.info(path + " is a file, adding to the list");
-                    fileList.add(path);
+                    String fileExtension = getFileExtension(path);
+                    if ((arguments.getExtToIgnore() != null && arguments.getExtToIgnore().contains(fileExtension))
+                    || checkForThisFile(path)) {
+                        logger.info(path + " has ignored extension, skipping");
+                    } else {
+                        logger.info(path + " is a file, adding to the list");
+                        fileList.add(path);
+                    }
                 }
             }
         } catch (IOException | DirectoryIteratorException x) {
             logger.error(x.toString());
         }
 
-        logger.info("Folders to be created for");
-        for (Path file : fileList) {
-            logger.info(file.toString());
+        if(!fileList.isEmpty()) {
+            logger.info("Folders to be created for");
+            for (Path file : fileList) {
+                logger.info(file.toString());
+            }
+            new FileHelp().createDirectory(fileList, arguments);
+        }else{
+            logger.info("Nothing to do");
         }
-        new FileHelp().createDirectory(fileList, arguments);
+    }
+
+    private String getFileExtension(Path path) {
+        String fileNameWithExtension = path.getFileName().toString();
+        return fileNameWithExtension.substring(fileNameWithExtension.lastIndexOf(".") + 1);
+    }
+
+    private boolean checkForThisFile(Path path) {
+        return path.toString().endsWith(".jar");
     }
 
     private void createDirectory(List<Path> fileList, ArgumentParser arguments){
@@ -51,10 +75,6 @@ public class FileHelp {
             try {
                 //Just the fileWithNoFolder name with extension
                 Path fileNameWithExtension = fileWithNoFolder.getFileName();
-
-                if(fileNameWithExtension.endsWith(".jar")){
-                    continue;
-                }
 
                 //Get filename without extension
                 String fileNameWithoutExtension = fileNameWithExtension.toString().substring(0, fileNameWithExtension.toString().lastIndexOf("."));

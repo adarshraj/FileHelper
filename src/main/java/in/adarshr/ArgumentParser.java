@@ -137,4 +137,20 @@ public class ArgumentParser {
     public void setRename(boolean rename) {
         this.rename = rename;
     }
+
+    public String operationToPerform() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (isCreateFolder()) {
+            stringBuilder.append("Create folder(s)").append("\n");
+            if(getRename()){
+                stringBuilder.append("with files renamed").append("\n");
+            }
+            if(isMove()){
+                stringBuilder.append("and move").append("\n");
+            }
+        } else if (getRename()) {
+            stringBuilder.append("Rename").append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }

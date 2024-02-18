@@ -29,8 +29,9 @@ public class FileHelp {
 
     private void begin(Path directory, List<Path> fileList, ArgumentParser arguments) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
-            for (Path path : stream) {
-                if(arguments.isCreateFolder()) {
+            if(checkForOpertions(arguments)) {
+                logger.info("Operation to be performed: " + arguments.operationToPerform());
+                for (Path path : stream) {
                     if (Files.isDirectory(path)) {
                         logger.info(path + " is a directory, ignoring");
                     } else {
@@ -49,20 +50,35 @@ public class FileHelp {
                         }
                     }
                 }
+            }else{
+                logger.info("No operation to be performed");
             }
         } catch (IOException | DirectoryIteratorException x) {
             logger.error(x.toString());
         }
 
         if(!fileList.isEmpty()) {
-            logger.info("Folders to be created for");
-            for (Path file : fileList) {
-                logger.info(file.toString());
+            if(arguments.isCreateFolder()) {
+                logger.info("Folders to be created for");
+                for (Path file : fileList) {
+                    logger.info(file.toString());
+                }
+                new FileHelp().createDirectory(fileList, arguments);
+            } else if (arguments.getRename()) {
+                logger.info("Files to be renamed");
+                for (Path file : fileList) {
+                    renameFile(file);
+                }
+            }else{
+                logger.info("Nothing to do");
             }
-            new FileHelp().createDirectory(fileList, arguments);
         }else{
             logger.info("Nothing to do");
         }
+    }
+
+    private boolean checkForOpertions(ArgumentParser arguments) {
+        return arguments.isCreateFolder() || arguments.getRename();
     }
 
     private String getFileExtension(Path path) {

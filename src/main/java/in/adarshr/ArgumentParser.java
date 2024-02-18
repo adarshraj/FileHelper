@@ -17,6 +17,7 @@ public class ArgumentParser {
     private String extToIgnore;
     private String extToInclude;
     private boolean createFolder;
+    private boolean rename;
 
     public void parseArguments(String[] args) {
         Options options = new Options();
@@ -25,6 +26,7 @@ public class ArgumentParser {
         options.addOption("f", "force", false, "Force the operation");
         options.addOption("h", "help", false, "Help");
         options.addOption("m", "move", false, "Move the file instead of copying");
+        options.addOption("r", "rename", false, "Rename the file");
         options.addOption("ei", "extToInclude", true, "Extension to include");
         options.addOption("ex", "extToIgnore", true, "Extension to exclude");
 
@@ -43,6 +45,9 @@ public class ArgumentParser {
             }
             if (cmd.hasOption("m")) {
                 setMove(true);
+            }
+            if (cmd.hasOption("r")) {
+                setRename(true);
             }
             if (cmd.hasOption("ex")) {
                 setExtToIgnore(cmd.getOptionValue("ex"));
@@ -113,11 +118,20 @@ public class ArgumentParser {
     public void setExtToInclude(String extToInclude) {
         this.extToInclude = extToInclude;
     }
+  
     public boolean isCreateFolder() {
         return createFolder;
     }
 
     public void setCreateFolder(boolean createFolder) {
         this.createFolder = createFolder;
+
+    public boolean getRename() {
+        return rename;
+    }
+
+    public void setRename(boolean rename) {
+        this.rename = rename;
+
     }
 }

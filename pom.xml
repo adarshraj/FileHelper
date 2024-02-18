@@ -53,7 +53,7 @@
                                 <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                                 <manifest>
                                     <mainClass>
-                                        in.adarshr.FileHelp
+                                        in.adarshr.filehelper.FileHelper
                                     </mainClass>
                                 </manifest>
                             </archive>

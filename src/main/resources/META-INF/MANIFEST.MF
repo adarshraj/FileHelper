@@ -1,2 +1,2 @@
-Main-Class: in.adarshr.FileHelp
+Main-Class: in.adarshr.filehelper.FileHelper
 

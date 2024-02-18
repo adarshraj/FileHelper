@@ -1,9 +1,13 @@
-package in.adarshr;
+package in.adarshr.filehelper;
 
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * ArgumentParser class
+ * Process the input arguments
+ */
 public class ArgumentParser {
     Logger logger = LoggerFactory.getLogger(ArgumentParser.class);
     public ArgumentParser(String[] arguments) {
@@ -19,6 +23,10 @@ public class ArgumentParser {
     private boolean createFolder;
     private boolean rename;
 
+    /**
+     * Parse the input arguments
+     * @param args arguments
+     */
     public void parseArguments(String[] args) {
         Options options = getOptions();
 
@@ -58,6 +66,10 @@ public class ArgumentParser {
         }
     }
 
+    /**
+     * Get the options
+     * @return Options
+     */
     private static Options getOptions() {
         Options options = new Options();
         options.addOption("c", "create", false, "Create folder");
@@ -138,6 +150,10 @@ public class ArgumentParser {
         this.rename = rename;
     }
 
+    /**
+     * Operation to be performed
+     * @return String
+     */
     public String operationToPerform() {
         StringBuilder stringBuilder = new StringBuilder();
         if (isCreateFolder()) {

@@ -1,4 +1,4 @@
-package in.adarshr;
+package in.adarshr.filehelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,10 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * FileRenamer class
+ * Rename the file based on the rules defined in renameRules.properties file
+ */
 public class FileRenamer {
     //SLF4J Logger
     private static final Logger LOG = LoggerFactory.getLogger(FileRenamer.class);
@@ -19,6 +23,10 @@ public class FileRenamer {
         this.renameRules = load();
     }
 
+    /**
+     * Load the renameRules.properties file
+     * @return Properties
+     */
     private Properties load() {
         try {
             Properties prop = new Properties();
@@ -30,6 +38,11 @@ public class FileRenamer {
         }
     }
 
+    /**
+     * Rename the file based on the rules defined in renameRules.properties file
+     * @param fileName file name
+     * @return String
+     */
     public String rename(String fileName) {
         if (renameRules == null) {
             LOG.error("renameRules.properties file not found");

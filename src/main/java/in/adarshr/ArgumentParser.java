@@ -16,9 +16,11 @@ public class ArgumentParser {
     private String file;
     private String extToIgnore;
     private String extToInclude;
+    private boolean createFolder;
 
     public void parseArguments(String[] args) {
         Options options = new Options();
+        options.addOption("c", "create", false, "Create folder");
         options.addOption("p", "path", true, "Path to folder");
         options.addOption("f", "force", false, "Force the operation");
         options.addOption("h", "help", false, "Help");
@@ -30,6 +32,9 @@ public class ArgumentParser {
         CommandLine cmd;
         try {
             cmd = commandLineParser.parse(options, args);
+            if (cmd.hasOption("c")) {
+                setCreateFolder(true);
+            }
             if (cmd.hasOption("p")) {
                 setFolder(cmd.getOptionValue("p"));
             }
@@ -108,5 +113,11 @@ public class ArgumentParser {
     public void setExtToInclude(String extToInclude) {
         this.extToInclude = extToInclude;
     }
+    public boolean isCreateFolder() {
+        return createFolder;
+    }
 
+    public void setCreateFolder(boolean createFolder) {
+        this.createFolder = createFolder;
+    }
 }

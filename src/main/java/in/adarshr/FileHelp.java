@@ -30,20 +30,22 @@ public class FileHelp {
     private void begin(Path directory, List<Path> fileList, ArgumentParser arguments) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
             for (Path path : stream) {
-                if (Files.isDirectory(path)) {
-                    logger.info(path + " is a directory, ignoring");
-                } else {
-                    String fileExtension = getFileExtension(path);
-                    if ((arguments.getExtToIgnore() != null && arguments.getExtToIgnore().contains(fileExtension))
-                    || checkForThisFile(path)) {
-                        logger.info(path + " has ignored extension, skipping");
+                if(arguments.isCreateFolder()) {
+                    if (Files.isDirectory(path)) {
+                        logger.info(path + " is a directory, ignoring");
                     } else {
-                        if (arguments.getExtToInclude() != null && arguments.getExtToInclude().contains(fileExtension)){
-                            logger.info(path + " file adding to the list");
-                            fileList.add(path);
-                        }else {
-                            logger.info(path + " is a file, adding to the list");
-                            fileList.add(path);
+                        String fileExtension = getFileExtension(path);
+                        if ((arguments.getExtToIgnore() != null && arguments.getExtToIgnore().contains(fileExtension))
+                                || checkForThisFile(path)) {
+                            logger.info(path + " has ignored extension, skipping");
+                        } else {
+                            if (arguments.getExtToInclude() != null && arguments.getExtToInclude().contains(fileExtension)) {
+                                logger.info(path + " file adding to the list");
+                                fileList.add(path);
+                            } else {
+                                logger.info(path + " is a file, adding to the list");
+                                fileList.add(path);
+                            }
                         }
                     }
                 }

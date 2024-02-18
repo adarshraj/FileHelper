@@ -69,7 +69,7 @@ public class FileHelp {
     }
 
     private boolean checkForThisFile(Path path) {
-        return path.toString().endsWith(".jar");
+        return path.toString().endsWith(".jar")|| path.toString().contains("config");
     }
 
     private void createDirectory(List<Path> fileList, ArgumentParser arguments){
@@ -77,6 +77,10 @@ public class FileHelp {
             try {
                 //Just the fileWithNoFolder name with extension
                 Path fileNameWithExtension = fileWithNoFolder.getFileName();
+
+                if(arguments.getRename()){
+                    fileNameWithExtension = renameFile(fileWithNoFolder);
+                }
 
                 //Get filename without extension
                 String fileNameWithoutExtension = fileNameWithExtension.toString().substring(0, fileNameWithExtension.toString().lastIndexOf("."));
@@ -108,8 +112,27 @@ public class FileHelp {
                     logger.info("File moved to : " + newlyCreatedFolder);
                 }
             } catch (IOException e) {
-                logger.error(e.toString());
+                logger.error("Exception while file handling: " + e);
             }
         }
+    }
+
+    private Path renameFile(Path fileName) {
+        Path fileNameWithExtension = fileName.getFileName();
+        String fileNameWithoutExtension = fileNameWithExtension.toString().substring(0, fileNameWithExtension.toString().lastIndexOf("."));
+        String fileExtension = fileNameWithExtension.toString().substring(fileNameWithExtension.toString().lastIndexOf("."));
+        Path parent = fileName.getParent();
+
+        FileRenamer fileRenamer = new FileRenamer();
+        String renamed = fileRenamer.rename(fileNameWithoutExtension);
+        Path renamedFile = parent.resolve(renamed + fileExtension);
+        try {
+            // Use Files.move to rename the source file to destination
+            Files.move(fileName, renamedFile);
+            logger.info("File renamed: " + renamed + fileExtension);
+        } catch (IOException e) {
+            logger.error("Failed to rename file: " + e);
+        }
+        return renamedFile;
     }
 }
